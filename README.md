@@ -37,10 +37,12 @@ Multi-tenant project management SaaS with kanban boards, team workspaces, and ro
                     └──────┬───────┘
                            │
                            ▼
-                    ┌──────────────┐
-                    │  PostgreSQL  │
-                    │  (Railway)   │
-                    └──────────────┘
+              ┌────────────┴────────────┐
+              ▼                         ▼
+       ┌──────────────┐         ┌──────────────┐
+       │  PostgreSQL  │         │ Cloudflare R2│
+       │  (Railway)   │         │ (attachments)│
+       └──────────────┘         └──────────────┘
 ```
 
 ```
@@ -60,7 +62,7 @@ teamboard/
 │       ├── src/invitation/# Email invitations (Resend)
 │       ├── src/comment/   # Task comments
 │       ├── src/label/     # Task labels/tags
-│       ├── src/attachment/ # File attachments (local disk)
+│       ├── src/attachment/ # File attachments (Cloudflare R2)
 │       ├── src/subscription/ # Stripe checkout + webhooks
 │       └── prisma/        # Database schema + migrations
 ├── packages/
@@ -79,6 +81,7 @@ teamboard/
 | Database | PostgreSQL 16 |
 | Auth | NextAuth v5 (credentials + Google OAuth) |
 | Drag & Drop | @dnd-kit/core + @dnd-kit/sortable |
+| File Storage | Cloudflare R2 (S3-compatible) |
 | Email | Resend |
 | Payments | Stripe (test mode) |
 | Testing | Playwright E2E (12 tests) |
@@ -132,7 +135,7 @@ teamboard/
 - Pagination + search on all list endpoints
 - Sentry error tracking (optional, via env var)
 - Global exception filter with structured error responses
-- Playwright E2E test suite (12 tests; currently failing in CI)
+- Playwright E2E test suite (12 tests)
 - GitHub Actions CI/CD (lint, build, typecheck, e2e)
 
 ## Local Setup
